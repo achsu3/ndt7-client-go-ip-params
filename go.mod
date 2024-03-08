@@ -1,4 +1,4 @@
-module github.com/m-lab/ndt7-client-go
+module github.com/achsu3/ndt7-client-go-ip-params
 
 go 1.20
 
