@@ -16,7 +16,9 @@ import (
 	"net/url"
 	"runtime"
 	"time"
-
+	"fmt"
+	"net"
+	"strings"
 	"github.com/gorilla/websocket"
 	"github.com/m-lab/locate/api/locate"
 	v2 "github.com/m-lab/locate/api/v2"
@@ -134,8 +136,49 @@ func makeUserAgent(clientName, clientVersion string) string {
 // NewClient creates a new client instance identified by the specified
 // clientName and clientVersion. M-Lab services may reject requests coming
 // from clients that do not identify themselves properly.
-func NewClient(clientName, clientVersion string) *Client {
+func NewClient(clientName, clientVersion string, clientInt string, clientIP string) *Client {
 	results := map[spec.TestKind]*LatestMeasurements{}
+	var local_addr_ip string
+    // Get all network interfaces on the local machine
+    interfaces, err := net.Interfaces()
+    if err != nil {
+        fmt.Println("Error:", err)
+    }
+
+    // Iterate over each network interface
+    for _, iface := range interfaces {
+        // Get addresses associated with the interface
+        addrs, err := iface.Addrs()
+        if err != nil {
+            fmt.Println("Error:", err)
+            continue
+        }
+
+        // Print the interface name
+        // fmt.Printf("Interface: %s\n", iface.Name)
+		if iface.Name == clientInt{
+			fmt.Printf("Found Interface: %s\n", iface.Name)
+			// Print each address associated with the interface
+			for _, a := range addrs {
+				if ipnet, ok := a.(*net.IPNet); ok {
+					
+					if clientIP == "4" && strings.Contains(ipnet.IP.String(), ".") {
+						local_addr_ip = ipnet.IP.String()
+						break
+					
+					}
+					if clientIP == "6"  && strings.Contains(ipnet.IP.String(), ":") {
+						local_addr_ip = ipnet.IP.String()
+						break
+					}
+				}
+			}
+		}
+    }
+	
+	fmt.Printf("Found Address: %s\n", local_addr_ip)
+	localAddr := &net.TCPAddr{IP: net.ParseIP(local_addr_ip)}
+
 	return &Client{
 		ClientName:    clientName,
 		ClientVersion: clientVersion,
@@ -146,7 +189,9 @@ func NewClient(clientName, clientVersion string) *Client {
 			return dialer.DialContext(ctx, urlStr, requestHeader)
 		},
 		Dialer: websocket.Dialer{
+			NetDialContext: (&net.Dialer{LocalAddr: localAddr}).DialContext,
 			HandshakeTimeout: DefaultWebSocketHandshakeTimeout,
+			//NetDial: netDial,
 		},
 		download: download.Run,
 		Locate: locate.NewClient(
@@ -161,6 +206,7 @@ func NewClient(clientName, clientVersion string) *Client {
 
 // doConnect establishes a websocket connection.
 func (c *Client) doConnect(ctx context.Context, serviceURL string) (*websocket.Conn, error) {
+	// fmt.Printf("URL: %s\n", serviceURL)
 	URL, _ := url.Parse(serviceURL)
 	q := URL.Query()
 	q.Set("client_arch", runtime.GOARCH)
@@ -219,6 +265,7 @@ func (c *Client) tryConnect(ctx context.Context, f testFn, s string) (<-chan spe
 // start is the function for starting a test.
 func (c *Client) start(ctx context.Context, f testFn, p string) (<-chan spec.Measurement, error) {
 	var customURL *url.URL
+	fmt.Println("client url:%s\n",customURL)
 	// Either the server or service url fields override the Locate API.
 	// First check for the server.
 	if c.Server != "" && (p == params.DownloadURLPath || p == params.UploadURLPath) {
