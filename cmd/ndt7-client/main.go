@@ -138,8 +138,8 @@ var (
 	flagService   = flagx.URL{}
 	flagUpload    = flag.Bool("upload", true, "perform upload measurement")
 	flagDownload  = flag.Bool("download", true, "perform download measurement")
-	flagInterface = flag.String("interface", "en0", "optional interface to bind to, default en0")
-	flagIP        = flag.String("ip", "6", "run over IPv4 or IPv6, 4 or 6, default 6")
+	// flagInterface = flag.String("interface", "en0", "optional interface to bind to, default en0")
+	flagIP        = flag.String("ip", "::", "local IP to bind to, default ::")
 )
 
 func init() {
@@ -215,7 +215,7 @@ func main() {
 			Upload:   *flagUpload,
 			Timeout:  *flagTimeout,
 			ClientFactory: func() *ndt7.Client {
-				c := ndt7.NewClient(ClientName, ClientVersion, *flagInterface, *flagIP)
+				c := ndt7.NewClient(ClientName, ClientVersion, *flagIP)
 				c.ServiceURL = flagService.URL
 				c.Server = *flagServer
 				c.Scheme = flagScheme.Value

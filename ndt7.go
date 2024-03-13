@@ -25,7 +25,6 @@ import (
 	"net/http"
 	"net/url"
 	"runtime"
-	"strings"
 	"time"
 )
 
@@ -136,48 +135,48 @@ func makeUserAgent(clientName, clientVersion string) string {
 // NewClient creates a new client instance identified by the specified
 // clientName and clientVersion. M-Lab services may reject requests coming
 // from clients that do not identify themselves properly.
-func NewClient(clientName, clientVersion string, clientInt string, clientIP string) *Client {
+func NewClient(clientName, clientVersion string, clientIP string) *Client {
 	results := map[spec.TestKind]*LatestMeasurements{}
-	var local_addr_ip string
-	// Get all network interfaces on the local machine
-	interfaces, err := net.Interfaces()
-	if err != nil {
-		fmt.Println("Error:", err)
-	}
+	// var local_addr_ip string
+	// // Get all network interfaces on the local machine
+	// interfaces, err := net.Interfaces()
+	// if err != nil {
+	// 	fmt.Println("Error:", err)
+	// }
 
-	// Iterate over each network interface
-	for _, iface := range interfaces {
-		// Get addresses associated with the interface
-		addrs, err := iface.Addrs()
-		if err != nil {
-			fmt.Println("Error:", err)
-			continue
-		}
+	// // Iterate over each network interface
+	// for _, iface := range interfaces {
+	// 	// Get addresses associated with the interface
+	// 	addrs, err := iface.Addrs()
+	// 	if err != nil {
+	// 		fmt.Println("Error:", err)
+	// 		continue
+	// 	}
 
-		// Print the interface name
-		// fmt.Printf("Interface: %s\n", iface.Name)
-		if iface.Name == clientInt {
-			fmt.Printf("Found Interface: %s\n", iface.Name)
-			// Print each address associated with the interface
-			for _, a := range addrs {
-				if ipnet, ok := a.(*net.IPNet); ok {
+	// 	// Print the interface name
+	// 	// fmt.Printf("Interface: %s\n", iface.Name)
+	// 	if iface.Name == clientInt {
+	// 		fmt.Printf("Found Interface: %s\n", iface.Name)
+	// 		// Print each address associated with the interface
+	// 		for _, a := range addrs {
+	// 			if ipnet, ok := a.(*net.IPNet); ok {
 
-					if clientIP == "4" && strings.Contains(ipnet.IP.String(), ".") {
-						local_addr_ip = ipnet.IP.String()
-						break
+	// 				if clientIP == "4" && strings.Contains(ipnet.IP.String(), ".") {
+	// 					local_addr_ip = ipnet.IP.String()
+	// 					break
 
-					}
-					if clientIP == "6" && strings.Contains(ipnet.IP.String(), ":") {
-						local_addr_ip = ipnet.IP.String()
-						break
-					}
-				}
-			}
-		}
-	}
+	// 				}
+	// 				if clientIP == "6" && strings.Contains(ipnet.IP.String(), ":") {
+	// 					local_addr_ip = ipnet.IP.String()
+	// 					break
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
 
-	fmt.Printf("Found Address: %s\n", local_addr_ip)
-	localAddr := &net.TCPAddr{IP: net.ParseIP(local_addr_ip)}
+	fmt.Printf("Found Address: %s\n", clientIP)
+	localAddr := &net.TCPAddr{IP: net.ParseIP(clientIP)}
 
 	return &Client{
 		ClientName:    clientName,
