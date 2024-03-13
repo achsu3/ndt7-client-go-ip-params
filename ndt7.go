@@ -175,7 +175,7 @@ func NewClient(clientName, clientVersion string, clientIP string) *Client {
 	// 	}
 	// }
 
-	fmt.Printf("Found Address: %s\n", clientIP)
+	// fmt.Printf("Found Address: %s\n", clientIP)
 	localAddr := &net.TCPAddr{IP: net.ParseIP(clientIP)}
 
 	return &Client{
