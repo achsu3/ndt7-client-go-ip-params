@@ -1,7 +1,7 @@
 package emitter
 
 import (
-	"github.com/m-lab/ndt7-client-go/spec"
+	"github.com/achsu3/ndt7-client-go-ip-params/spec"
 )
 
 // Quiet acts as a filter allowing summary and error messages only, and

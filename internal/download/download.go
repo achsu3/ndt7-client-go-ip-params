@@ -8,10 +8,10 @@ import (
 	"io/ioutil"
 	"time"
 
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/params"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/websocketx"
+	"github.com/achsu3/ndt7-client-go-ip-params/spec"
 	"github.com/gorilla/websocket"
-	"github.com/m-lab/ndt7-client-go/internal/params"
-	"github.com/m-lab/ndt7-client-go/internal/websocketx"
-	"github.com/m-lab/ndt7-client-go/spec"
 )
 
 // Run runs the download test. It runs until the ctx expires or the maximum

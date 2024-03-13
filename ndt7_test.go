@@ -7,15 +7,15 @@ import (
 	"os"
 	"testing"
 
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/params"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/websocketx"
+	"github.com/achsu3/ndt7-client-go-ip-params/spec"
 	"github.com/gorilla/websocket"
 	"github.com/m-lab/go/testingx"
 	"github.com/m-lab/locate/api/locate"
 	v2 "github.com/m-lab/locate/api/v2"
 	"github.com/m-lab/locate/locatetest"
 	"github.com/m-lab/ndt-server/ndt7/ndt7test"
-	"github.com/m-lab/ndt7-client-go/internal/params"
-	"github.com/m-lab/ndt7-client-go/internal/websocketx"
-	"github.com/m-lab/ndt7-client-go/spec"
 )
 
 const (

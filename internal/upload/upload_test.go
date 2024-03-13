@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/mocks"
+	"github.com/achsu3/ndt7-client-go-ip-params/spec"
 	"github.com/gorilla/websocket"
-	"github.com/m-lab/ndt7-client-go/internal/mocks"
-	"github.com/m-lab/ndt7-client-go/spec"
 )
 
 func TestNormal(t *testing.T) {

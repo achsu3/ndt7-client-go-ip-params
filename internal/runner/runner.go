@@ -6,10 +6,10 @@ import (
 	"net"
 	"time"
 
+	"github.com/achsu3/ndt7-client-go-ip-params"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/emitter"
+	"github.com/achsu3/ndt7-client-go-ip-params/spec"
 	"github.com/m-lab/go/memoryless"
-	"github.com/m-lab/ndt7-client-go"
-	"github.com/m-lab/ndt7-client-go/internal/emitter"
-	"github.com/m-lab/ndt7-client-go/spec"
 )
 
 type RunnerOptions struct {

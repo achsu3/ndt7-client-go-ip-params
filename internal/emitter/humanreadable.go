@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/m-lab/ndt7-client-go/spec"
+	"github.com/achsu3/ndt7-client-go-ip-params/spec"
 )
 
 // HumanReadable is a human readable emitter. It emits the events generated

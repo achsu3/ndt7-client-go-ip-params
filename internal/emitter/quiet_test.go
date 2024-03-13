@@ -4,9 +4,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/m-lab/ndt7-client-go/internal/mocks"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/mocks"
 
-	"github.com/m-lab/ndt7-client-go/spec"
+	"github.com/achsu3/ndt7-client-go-ip-params/spec"
 )
 
 func TestNewQuiet(t *testing.T) {

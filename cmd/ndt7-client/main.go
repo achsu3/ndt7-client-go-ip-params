@@ -2,7 +2,7 @@
 //
 // Usage:
 //
-//    ndt7-client [flags]
+//	ndt7-client [flags]
 //
 // The `-format` flag defines how the output should be emitter. Possible
 // values are "human", which is the default, and "json", where each message
@@ -51,13 +51,13 @@
 //
 // When the download test starts, this event is emitted:
 //
-//   {"Key":"starting","Value":{"Test":"download"}}
+//	{"Key":"starting","Value":{"Test":"download"}}
 //
 // After this event is emitted, we discover the server to use (unless it
 // has been configured by the user) and we connect to it. If any of these
 // operations fail, this event is emitted:
 //
-//   {"Key":"error","Value":{"Failure":"<failure>","Test":"download"}}
+//	{"Key":"error","Value":{"Failure":"<failure>","Test":"download"}}
 //
 // where `<failure>` is the error that occurred serialized as string. In
 // case of failure, the test is over and the next event to be emitted is
@@ -65,23 +65,23 @@
 //
 // Otherwise, the download test starts and we see the following event:
 //
-//   {"Key":"connected","Value":{"Server":"<server>","Test":"download"}}
+//	{"Key":"connected","Value":{"Server":"<server>","Test":"download"}}
 //
 // where `<server>` is the FQDN of the server we're using. Then there
 // are zero or more events like:
 //
-//   {"Key": "measurement","Value": <value>}
+//	{"Key": "measurement","Value": <value>}
 //
 // where `<value>` is a serialized spec.Measurement struct.
 //
 // Finally, this event is always emitted at the end of the test:
 //
-//   {"Key":"complete","Value":{"Test":"download"}}
+//	{"Key":"complete","Value":{"Test":"download"}}
 //
 // The upload test is like the download test, except for the
 // value of the `"Test"` key.
 //
-// Exit code
+// # Exit code
 //
 // This tool exits with zero on success, nonzero on failure. Under
 // some severe internal error conditions, this tool will exit using
@@ -100,11 +100,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/achsu3/ndt7-client-go-ip-params"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/emitter"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/params"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/runner"
 	"github.com/m-lab/go/flagx"
-	"github.com/m-lab/ndt7-client-go"
-	"github.com/m-lab/ndt7-client-go/internal/emitter"
-	"github.com/m-lab/ndt7-client-go/internal/params"
-	"github.com/m-lab/ndt7-client-go/internal/runner"
 	"golang.org/x/sys/cpu"
 )
 
@@ -134,12 +134,12 @@ var (
 	flagServer   = flag.String("server", "", "optional ndt7 server hostname")
 	flagTimeout  = flag.Duration(
 		"timeout", defaultTimeout, "time after which the test is aborted")
-	flagQuiet    = flag.Bool("quiet", false, "emit summary and errors only")
-	flagService  = flagx.URL{}
-	flagUpload   = flag.Bool("upload", true, "perform upload measurement")
-	flagDownload = flag.Bool("download", true, "perform download measurement")
+	flagQuiet     = flag.Bool("quiet", false, "emit summary and errors only")
+	flagService   = flagx.URL{}
+	flagUpload    = flag.Bool("upload", true, "perform upload measurement")
+	flagDownload  = flag.Bool("download", true, "perform download measurement")
 	flagInterface = flag.String("interface", "en0", "optional interface to bind to, default en0")
-	flagIP = flag.String("ip", "6", "run over IPv4 or IPv6, 4 or 6, default 6")
+	flagIP        = flag.String("ip", "6", "run over IPv4 or IPv6, 4 or 6, default 6")
 )
 
 func init() {
@@ -212,8 +212,8 @@ func main() {
 	r := runner.New(
 		runner.RunnerOptions{
 			Download: *flagDownload,
-			Upload: *flagUpload,
-			Timeout: *flagTimeout,
+			Upload:   *flagUpload,
+			Timeout:  *flagTimeout,
 			ClientFactory: func() *ndt7.Client {
 				c := ndt7.NewClient(ClientName, ClientVersion, *flagInterface, *flagIP)
 				c.ServiceURL = flagService.URL

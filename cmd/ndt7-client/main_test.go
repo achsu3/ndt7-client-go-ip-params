@@ -5,9 +5,9 @@ import (
 	"os"
 	"testing"
 
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/params"
 	"github.com/m-lab/go/testingx"
 	"github.com/m-lab/ndt-server/ndt7/ndt7test"
-	"github.com/m-lab/ndt7-client-go/internal/params"
 )
 
 func TestNormalUsage(t *testing.T) {
@@ -124,4 +124,3 @@ func TestDownloadError(t *testing.T) {
 		t.Fatal("expected nonzero return code here")
 	}
 }
-

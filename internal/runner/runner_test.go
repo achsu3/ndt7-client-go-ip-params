@@ -11,15 +11,15 @@ import (
 	"testing"
 	"time"
 
+	"github.com/achsu3/ndt7-client-go-ip-params"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/emitter"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/mocks"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/params"
+	"github.com/achsu3/ndt7-client-go-ip-params/spec"
 	"github.com/m-lab/go/memoryless"
 	"github.com/m-lab/go/testingx"
 	"github.com/m-lab/locate/api/locate"
 	"github.com/m-lab/ndt-server/ndt7/ndt7test"
-	"github.com/m-lab/ndt7-client-go"
-	"github.com/m-lab/ndt7-client-go/internal/emitter"
-	"github.com/m-lab/ndt7-client-go/internal/mocks"
-	"github.com/m-lab/ndt7-client-go/internal/params"
-	"github.com/m-lab/ndt7-client-go/spec"
 )
 
 var (

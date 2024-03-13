@@ -12,21 +12,21 @@ package ndt7
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"runtime"
-	"time"
 	"fmt"
-	"net"
-	"strings"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/download"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/params"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/upload"
+	"github.com/achsu3/ndt7-client-go-ip-params/internal/websocketx"
+	"github.com/achsu3/ndt7-client-go-ip-params/spec"
 	"github.com/gorilla/websocket"
 	"github.com/m-lab/locate/api/locate"
 	v2 "github.com/m-lab/locate/api/v2"
-	"github.com/m-lab/ndt7-client-go/internal/download"
-	"github.com/m-lab/ndt7-client-go/internal/params"
-	"github.com/m-lab/ndt7-client-go/internal/upload"
-	"github.com/m-lab/ndt7-client-go/internal/websocketx"
-	"github.com/m-lab/ndt7-client-go/spec"
+	"net"
+	"net/http"
+	"net/url"
+	"runtime"
+	"strings"
+	"time"
 )
 
 const (
@@ -139,43 +139,43 @@ func makeUserAgent(clientName, clientVersion string) string {
 func NewClient(clientName, clientVersion string, clientInt string, clientIP string) *Client {
 	results := map[spec.TestKind]*LatestMeasurements{}
 	var local_addr_ip string
-    // Get all network interfaces on the local machine
-    interfaces, err := net.Interfaces()
-    if err != nil {
-        fmt.Println("Error:", err)
-    }
+	// Get all network interfaces on the local machine
+	interfaces, err := net.Interfaces()
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
 
-    // Iterate over each network interface
-    for _, iface := range interfaces {
-        // Get addresses associated with the interface
-        addrs, err := iface.Addrs()
-        if err != nil {
-            fmt.Println("Error:", err)
-            continue
-        }
+	// Iterate over each network interface
+	for _, iface := range interfaces {
+		// Get addresses associated with the interface
+		addrs, err := iface.Addrs()
+		if err != nil {
+			fmt.Println("Error:", err)
+			continue
+		}
 
-        // Print the interface name
-        // fmt.Printf("Interface: %s\n", iface.Name)
-		if iface.Name == clientInt{
+		// Print the interface name
+		// fmt.Printf("Interface: %s\n", iface.Name)
+		if iface.Name == clientInt {
 			fmt.Printf("Found Interface: %s\n", iface.Name)
 			// Print each address associated with the interface
 			for _, a := range addrs {
 				if ipnet, ok := a.(*net.IPNet); ok {
-					
+
 					if clientIP == "4" && strings.Contains(ipnet.IP.String(), ".") {
 						local_addr_ip = ipnet.IP.String()
 						break
-					
+
 					}
-					if clientIP == "6"  && strings.Contains(ipnet.IP.String(), ":") {
+					if clientIP == "6" && strings.Contains(ipnet.IP.String(), ":") {
 						local_addr_ip = ipnet.IP.String()
 						break
 					}
 				}
 			}
 		}
-    }
-	
+	}
+
 	fmt.Printf("Found Address: %s\n", local_addr_ip)
 	localAddr := &net.TCPAddr{IP: net.ParseIP(local_addr_ip)}
 
@@ -189,7 +189,7 @@ func NewClient(clientName, clientVersion string, clientInt string, clientIP stri
 			return dialer.DialContext(ctx, urlStr, requestHeader)
 		},
 		Dialer: websocket.Dialer{
-			NetDialContext: (&net.Dialer{LocalAddr: localAddr}).DialContext,
+			NetDialContext:   (&net.Dialer{LocalAddr: localAddr}).DialContext,
 			HandshakeTimeout: DefaultWebSocketHandshakeTimeout,
 			//NetDial: netDial,
 		},
@@ -265,7 +265,7 @@ func (c *Client) tryConnect(ctx context.Context, f testFn, s string) (<-chan spe
 // start is the function for starting a test.
 func (c *Client) start(ctx context.Context, f testFn, p string) (<-chan spec.Measurement, error) {
 	var customURL *url.URL
-	fmt.Println("client url:%s\n",customURL)
+	fmt.Println("client url:%s\n", customURL)
 	// Either the server or service url fields override the Locate API.
 	// First check for the server.
 	if c.Server != "" && (p == params.DownloadURLPath || p == params.UploadURLPath) {
